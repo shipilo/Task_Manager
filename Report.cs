@@ -3,7 +3,6 @@
     class Report
     {
         public string Text;
-        //data
         public TeamMember Performer;
         public Report(string text, TeamMember performer)
         {

@@ -12,10 +12,9 @@ namespace Task_Manager
             Отклонение,
             В_работе,
             На_проверке,
-            Выполнена
+            Выполнена,
         }
         public string Description;
-        //public DeadLine
         public TeamMember Initiator;
         public TeamMember Performer;
         public Stack<Report> Reports;

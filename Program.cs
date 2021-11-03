@@ -45,77 +45,82 @@ namespace Task_Manager
             Console.WriteLine("\n" + project001.GetCurrentTasks());
             Console.WriteLine("Все задачи распределены.");
 
+            project001.Status++;
+
             int progress = 0;
             int speed = 1000;
             bool notDeleted = true;
             while (progress < project001.Tasks.Count)
             {
                 Console.WriteLine("\nОбновление информации...");
-                foreach (Task task in project001.Tasks)
+                for(int i = 0; i < project001.Tasks.Count; i++)
                 {
                     TimerTick(speed);
 
-                    if (task.Status == Task.State.Назначена)
+                    if (project001.Tasks[i].Status == Task.State.Назначена)
                     {
                         if (Randomizer(10))
                         {
                             if (Randomizer(50))
                             {
-                                task.Status = Task.State.Делегирование;
+                                project001.Tasks[i].Status = Task.State.Делегирование;
                             }
                             else
                             {
-                                task.Status = Task.State.Отклонение;
+                                project001.Tasks[i].Status = Task.State.Отклонение;
                             }
                         }
                         else
                         {
-                            task.Status = Task.State.В_работе;
+                            project001.Tasks[i].Status = Task.State.В_работе;
                         }
                     }
-                    else if (task.Status == Task.State.В_работе)
+                    else if (project001.Tasks[i].Status == Task.State.В_работе)
                     {
                         if (Randomizer(50))
                         {
-                            task.Reports.Push(new Report(task.Description + " ~отчёт~", task.Performer));
-                            task.Status = Task.State.На_проверке;
+                            project001.Tasks[i].Reports.Push(new Report(project001.Tasks[i].Description + " ~отчёт~", project001.Tasks[i].Performer));
+                            project001.Tasks[i].Status = Task.State.На_проверке;
                         }
                     }
-                    else if (task.Status == Task.State.На_проверке)
+                    else if (project001.Tasks[i].Status == Task.State.На_проверке)
                     {
                         if (Randomizer(50))
                         {
-                            Console.WriteLine($"{task.Reports.Peek()} утверждён.");
-                            task.Status = Task.State.Выполнена;
+                            Console.WriteLine($"{project001.Tasks[i].Reports.Peek()} утверждён.");
+                            project001.Tasks[i].Status = Task.State.Выполнена;
                             progress++;
                         }
                     }
-                    else if (task.Status == Task.State.Делегирование)
+                    else if (project001.Tasks[i].Status == Task.State.Делегирование)
                     {
-                        task.Performer = team[rnd.Next(2, team.Length - 1)];
-                        task.Status = Task.State.Назначена;
+                        project001.Tasks[i].Performer = team[rnd.Next(2, team.Length - 1)];
+                        project001.Tasks[i].Status = Task.State.Назначена;
                     }
-                    else if (task.Status == Task.State.Отклонение)
+                    else if (project001.Tasks[i].Status == Task.State.Отклонение)
                     {
                         if (Randomizer(50))
                         {
-                            task.Performer = team[rnd.Next(2, team.Length - 1)];
-                            task.Status = Task.State.Назначена;
+                            project001.Tasks[i].Performer = team[rnd.Next(2, team.Length - 1)];
+                            project001.Tasks[i].Status = Task.State.Назначена;
                         }
                         else
                         {
-                            project001.Tasks.Remove(task);
-                            Console.WriteLine($"{task.Description}. (задача удалена)");
+                            project001.Tasks.RemoveAt(i);
+                            i--;
+                            Console.WriteLine($"{project001.Tasks[i].Description}. (задача удалена)");
                             notDeleted = false;
                         }
                     }
 
-                    if (notDeleted) Console.WriteLine(task);
+                    if (notDeleted) Console.WriteLine(project001.Tasks[i]);
                     notDeleted = true;
 
                     TimerTick(speed);
                 }
             }
+
+            project001.Status++;
 
             Console.WriteLine($"\nВсе задачи выполнены.\nПроект {project001.Description} закрыт.");
 
